@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Circle K International at UC Merced</title>
+	<style type="text/css">
+		body
+		{
+			padding: 0;
+			border: 0;
+			margin: 0;
+			background: blue;
+			text-align: center;
+			color: white;
+			overflow-x: hidden;
+			background: linear-gradient(180deg, #00ffff, #0000ff); /* Standard syntax */
+			text-shadow: 0px -4px 9px rgba(0,0,255, 0.4), 0 0px 16px black, 0 0px 16px blue;
+		}
+		#turtleImg
+		{
+			display: none;
+		}
+		canvas
+		{
+			margin: 0;
+			width: 100vw;
+			height: 100vh;
+			display: none;
+		}
+		h1
+		{
+			font-weight: 900;
+			font-size: 39px;
+		}
+		div
+		{
+			margin: 0;
+			padding: 0;
+			border: 0;
+			width: 100vw;
+			height: 100%;
+			display: block;
+		}
+		#main p
+		{
+			font-size: 24px;
+			padding-left: 20%;
+			padding-right: 20%;
+		}
+		button
+		{
+			background-color: #ffff44;
+			border: none;
+			color: black;
+			border-radius: 9px;
+			font-size: 16px;
+			padding: 16px;
+			padding-left: 36px;
+			padding-right: 36px;
+			cursor: pointer;
+		}
+		button:hover
+		{
+			background-color: black;
+			padding-left: 44px;
+			padding-right: 44px;
+			color: #00ffff;
+		}
+		iframe
+		{
+			display: block;
+			width: 90%;
+			margin: 5%;
+		}
+		#footer
+		{
+			padding: 10px;
+			background: rgba(102, 0, 204, 0.4);
+		}
+		.logo
+		{
+			margin-right: 10px;
+		}
+		.logo:hover
+		{
+			transform: translateX(4px);
+		}
+		table
+		{
+			margin-left: auto;
+			margin-right: auto;
+		}
+		td
+		{
+			padding-right: 10px;
+		}
+		ul
+		{
+			list-style-type: none;
+			padding: 0;
+		}
+		a
+		{
+			color: white;
+			text-decoration: none;
+		}
+		a:hover
+		{
+			color: rgb(204, 102, 153);
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<div id="main">
+		<h1>Circle K International at UC Merced</h1>
+		<p>
+			Circle K International is a collegiate community service organization, with over 10,000 members around the globe. Together, all of the Circle K clubs promote service, leadership, and fellowship, on all of our campuses.
+		</p>
+	</div>
+	<img id="turtleImg" src="turtle.png">
+	<canvas id="drawing"></canvas>
+	<div id="calendar">
+		<iframe src="https://calendar.google.com/calendar/embed?src=b9sfemfvrgembdnkd5cvupif6g%40group.calendar.google.com&ctz=America/Los_Angeles"  width="800" height="600" frameborder="0" scrolling="no">
+		</iframe>
+	</div>
+	<div id="footer">
+		<a href="http://circlek.org">
+			<img src="Logos\CKILogo.png" alt="CKI Logo" class="logo">
+		</a>
+		<a href="http://www.cnhcirclek.org/">
+			<img src="Logos\emblem_CNH.png" alt="District Logo" class="logo">
+		</a>
+		<a href="http://centralcoast.cnhcirclek.org/">
+			<img src="Logos\CentralCoastLogo.png" alt="Division Logo" class="logo">
+		</a>
+		<table style="text-align: left;">
+			<tr>
+				<th>Apply</th>
+				<th>Resources</th>
+				<th>Contact Us</th>
+			</tr>
+			<tr>
+				<td>
+					<ul>
+						<li><a href="application.pdf">PDF Application</a></li>
+						<li><a href="#online app"><del>Online Application</del></a></li>
+					</ul>
+				</td>
+				<td>
+					<ul>
+						<li><a href="http://resources.cnhcirclek.org/category/21-award_files_archive/">Awards</a></li>
+						<li><a href="http://resources.cnhcirclek.org/category/7-scholarships/">Scholarships</a></li>
+					</ul>
+				</td>
+				<td>
+					<ul>
+						<li><a href="https://catlife.ucmerced.edu/organization/circlek">Catlife</a></li>
+						<li><a href="https://www.facebook.com/groups/1591202977817992/">Facebook</a></li>
+					</ul>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<script type="text/javascript">
+		var mCanvas = document.getElementById("drawing");
+		mCanvas.width = screen.availWidth;
+		mCanvas.height = screen.availHeight;
+		mCanvas.style.display = "block";
+		var img = document.getElementById("turtleImg");
+		var ctx = mCanvas.getContext("2d");
+		function clear()
+		{
+			ctx.clearRect(0,0, mCanvas.width, mCanvas.height);
+		}
+		function turtle()
+		{
+			this.x = mCanvas.width/2 - 150;
+			this.y = mCanvas.height - 253;
+			this.v = 0;
+			this.moveLeft = function()
+			{
+				this.v = -mCanvas.width/100;
+			}
+			this.moveRight = function()
+			{
+				this.v = mCanvas.width/100;
+			}
+			this.stop = function()
+			{
+				this.v = 0;
+			}
+			this.contains = function(x, y)
+			{
+				if (x <= this.x+300 && x >= this.x && y >= mCanvas.height-300 && y <= mCanvas.height)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			this.draw = function()
+			{
+				this.x += this.v;
+				if (this.x < 0)
+				{
+					this.x = 0;
+				}
+				else if (this.x > mCanvas.width-300)
+				{
+					this.x = mCanvas.width-300;
+				}
+				ctx.drawImage(img, this.x, this.y);
+			}
+		}
+		function rock()
+		{
+			this.x = 0;
+			this.width = mCanvas.width/8;
+			this.y = -1*sample(300,1500);
+			this.dy = mCanvas.height/175;
+			this.set = function()
+			{
+				this.x = sample(0, mCanvas.width-this.width);
+				this.y = -1*sample(300,1500);
+				this.fell = false;
+			}
+			this.draw = function()
+			{
+				this.y += this.dy;
+				ctx.fillStyle = "rgba(255,166,166,0.6)";
+				ctx.fillRect(this.x, this.y, this.width, 200);
+				if (this.y > mCanvas.height + 100)
+				{
+					this.fell = true;
+				}
+			}
+		}
+		function sample(a, b)
+		{
+			return Math.floor(Math.random()*(b-a)+a);
+		}
+
+		var player = new turtle();
+		var rects = [];
+		var started = false;
+		document.onkeydown = function(e)
+		{
+			if (started)
+			{
+				switch (e.keyCode)
+				{
+					case(65):
+						player.moveRight();
+						break;
+					case(68):
+						player.moveLeft();
+						break;
+				}
+			}
+			else
+			{
+				for (var i = 0; i < 4; ++i)
+				{
+					rects.push(new rock());
+					rects[i].set();
+				}
+				started = true;
+			}
+		}
+		document.onkeyup = function()
+		{
+			player.stop();
+		}
+		function play()
+		{
+			clear();
+			player.draw();
+			for (var i = 0; i < rects.length; ++i)
+			{
+				rects[i].draw();
+				if (rects[i].fell)
+				{
+					rects[i].set();
+				}
+			}
+		}
+		ctx.translate(mCanvas.width, mCanvas.height);
+		ctx.rotate(Math.PI);
+		var interval = setInterval(play, 10);
+	</script>
+</body>
+</html>

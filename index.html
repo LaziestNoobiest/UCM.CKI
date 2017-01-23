@@ -25,6 +25,9 @@
 			width: 100vw;
 			height: 100vh;
 			display: none;
+			border-style: solid;
+			border-width: 2px;
+			border-color: black;
 		}
 		h1
 		{
@@ -271,6 +274,22 @@
 			}
 		}
 		document.onkeyup = function()
+		{
+			player.stop();
+		}
+		document.ontouchstart = function(e)
+		{
+			var mTouch = e.touches.item(0);
+			if (mTouch.clientX >= mCanvas.width/2)
+			{
+				player.moveLeft();
+			}
+			else
+			{
+				player.moveRight();
+			}
+		}
+		document.ontouchend = function()
 		{
 			player.stop();
 		}

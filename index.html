@@ -15,7 +15,11 @@
 			background: linear-gradient(180deg, #00ffff, #0000ff); /* Standard syntax */
 			text-shadow: 0px -4px 9px rgba(0,0,255, 0.4), 0 0px 16px black, 0 0px 16px blue;
 		}
-		#turtleImg
+		#join
+		{
+			
+		}
+		.turtle
 		{
 			display: none;
 		}
@@ -120,7 +124,8 @@
 			Circle K International is a collegiate community service organization, with over 10,000 members around the globe. Together, all of the Circle K clubs promote service, leadership, and fellowship, on all of our campuses.
 		</p>
 	</div>
-	<img id="turtleImg" src="turtle.png">
+	<img class="turtle" id="turtleImg" src="turtle.png">
+	<img class="turtle" id="turtleMini" src="turtleMini.png">
 	<canvas id="drawing"></canvas>
 	<div id="calendar">
 		<iframe src="https://calendar.google.com/calendar/embed?src=b9sfemfvrgembdnkd5cvupif6g%40group.calendar.google.com&ctz=America/Los_Angeles"  width="800" height="600" frameborder="0" scrolling="no">
@@ -171,6 +176,14 @@
 		mCanvas.height = screen.availHeight;
 		mCanvas.style.display = "block";
 		var img = document.getElementById("turtleImg");
+		var tW = 300;
+		var tH = 252;
+		if (mCanvas.width < 900)
+		{
+			img = document.getElementById("turtleMini");
+			tW = 50;
+			tH = 42;
+		}
 		var ctx = mCanvas.getContext("2d");
 		function clear()
 		{
@@ -178,8 +191,8 @@
 		}
 		function turtle()
 		{
-			this.x = mCanvas.width/2 - 150;
-			this.y = mCanvas.height - 253;
+			this.x = mCanvas.width/2 - tW/2;
+			this.y = mCanvas.height - tH;
 			this.v = 0;
 			this.moveLeft = function()
 			{
@@ -195,7 +208,7 @@
 			}
 			this.contains = function(x, y)
 			{
-				if (x <= this.x+300 && x >= this.x && y >= mCanvas.height-300 && y <= mCanvas.height)
+				if (x <= this.x+tW && x >= this.x && y >= mCanvas.height-tH && y <= mCanvas.height)
 				{
 					return true;
 				}
@@ -211,9 +224,9 @@
 				{
 					this.x = 0;
 				}
-				else if (this.x > mCanvas.width-300)
+				else if (this.x > mCanvas.width-tW)
 				{
-					this.x = mCanvas.width-300;
+					this.x = mCanvas.width-tW;
 				}
 				ctx.drawImage(img, this.x, this.y);
 			}
@@ -279,14 +292,26 @@
 		}
 		document.ontouchstart = function(e)
 		{
-			var mTouch = e.touches.item(0);
-			if (mTouch.clientX >= mCanvas.width/2)
+			if (started)
 			{
-				player.moveLeft();
+				var mTouch = e.touches.item(0);
+				if (mTouch.clientX >= mCanvas.width/2)
+				{
+					player.moveLeft();
+				}
+				else
+				{
+					player.moveRight();
+				}
 			}
 			else
 			{
-				player.moveRight();
+				for (var i = 0; i < 4; ++i)
+				{
+					rects.push(new rock());
+					rects[i].set();
+				}
+				started = true;
 			}
 		}
 		document.ontouchend = function()
